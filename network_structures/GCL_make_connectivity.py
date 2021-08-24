@@ -32,7 +32,7 @@ def generate_glom_positions(p_num_glom, glom_density, dx, dy, dz, diam):
     glom_pos = np.zeros((int(num_glom.sum()), 3))
     ix = 0
     for k in range(0, avg_mf_incube):
-        glom_mf_id[ix : ix + int(num_glom[k])] = k
+        glom_mf_id[ix: ix + int(num_glom[k])] = k
         # For each mossy fiber, the first glomerulus is randomly (uniformly) positioned
         glom_pos[ix, :] = np.random.uniform(
             low=-big_diam / 2, high=big_diam / 2, size=(3)
@@ -145,20 +145,7 @@ def optswap(glom_incomplete, grcs_incomplete, grcs_swappable, grc_pos, glom_pos,
         gloms = []
         for k in range(len(grcs_swappable)):
             # glomeruli that are connected to grcs_swappable[j] but not to grcs_incomplete[j] (through any gloms on that mf)
-            gloms.append(
-                [
-                    gl
-                    for gl in range(N_glom)
-                    if (
-                        conn_mat[gl, grcs_swappable[k]] == 1
-                        and conn_mat[
-                            np.where(glom_mf_id == glom_mf_id[gl])[0],
-                            grcs_incomplete[j],
-                        ].sum()
-                        == 0
-                    )
-                ]
-            )
+            gloms.append([gl for gl in range(N_glom) if (conn_mat[gl, grcs_swappable[k]] == 1 and conn_mat[np.where(glom_mf_id == glom_mf_id[gl])[0], grcs_incomplete[j], ].sum() == 0)])
         gloms_swappable.append(gloms)
     # Next, make table of
     deviation = np.zeros((len(grcs_incomplete), len(grcs_swappable)), float)
@@ -210,11 +197,7 @@ def shuffle_conns(grc_pos, glom_pos, d, dlen, gloms_incomplete, conn_mat, ddist)
             grcs_incomplete = [n for n in range(N_grc) if conn_mat[:, n].sum() < d]
             # list of granule cells that could be swapped, i.e., have = d dendrites
             # and that are not connected to the glomerulus in question
-            grcs_swappable = [
-                n
-                for n in range(N_grc)
-                if (n not in grcs_incomplete and conn_mat[gl, n] == 0)
-            ]
+            grcs_swappable = [n for n in range(N_grc) if (n not in grcs_incomplete and conn_mat[gl, n] == 0)]
             # find optimal "swap", update connectivity matrix
             conn_mat = optswap(
                 gl, grcs_incomplete, grcs_swappable, grc_pos, glom_pos, conn_mat, dlen
