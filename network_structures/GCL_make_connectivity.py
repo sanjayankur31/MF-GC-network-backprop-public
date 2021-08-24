@@ -107,6 +107,7 @@ def closest_allowed_grc(attached_grcs, grc_pos, this_glom_pos, conn_mat, d, dlen
 
 
 def check_valid_connectivity(conn_mat, ddist, glom_mf_id, d):
+    # TODO: should point 1 not be "any granule cell is connected to multiple glomeruli"
     """Checks that connectivity is valid, or throws an error if:
     1. no granule cell is connected to multiple glomeruli from the same mossy fiber
     2. degree distribution of glomeruli does not match ddist
