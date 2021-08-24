@@ -4,3 +4,5 @@
 /osb_model/OSBnet.png
 /osb_model/OSBnet.svg
 /osb_model/*.gv*
+
+.mypy_cache
